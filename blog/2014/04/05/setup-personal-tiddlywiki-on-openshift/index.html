@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Setup a personal TiddlyWiki on OpenShift</title>
+  <meta name="author" content="Eric Miao">
+
+
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link href="/favicon.png" rel="icon">
+  <link href="/theme/css/main.css" media="screen, projection"
+        rel="stylesheet" type="text/css">
+  <script src="/theme/js/modernizr-2.0.js"></script>
+  <script src="/theme/js/ender.js"></script>
+  <script src="/theme/js/octopress.js" type="text/javascript"></script>
+
+  <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic"
+        rel="stylesheet" type="text/css">
+  <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic"
+        rel="stylesheet" type="text/css">
+</head>
+
+<body>
+  <header role="banner"><hgroup>
+  <h1><a href="/">Another Code Farmer's Backyard</a></h1>
+</hgroup></header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+</ul>
+
+
+
+<ul class="main-navigation">
+    <li><a href="/archives.html">Archives</a></li>
+    <li><a href="http://ericmiao.github.io/">Home Page</a></li>
+    <li class="active">
+    <a href="/category/misc.html">Misc</a>
+    </li>
+</ul></nav>
+  <div id="main">
+    <div id="content">
+<div>
+  <article class="hentry" role="article">
+<header>
+      <h1 class="entry-title">Setup a personal TiddlyWiki on OpenShift</h1>
+      <p class="meta"><time datetime="2014-04-05T00:00:00" pubdate>Sat 05 April 2014</time></p>
+</header>
+
+  <div class="entry-content"><hr />
+<!-- PELICAN_BEGIN_SUMMARY -->
+
+<p>I have always been looking for a perfect personal note taking tool, and tried
+many different things, yet I'm satisified with none of them.
+<a href="http://evernote.com">Evernote</a> is neat and clean, has great support for rich
+text format, as well as pictures, audio and video. It's also web based, and
+has nice apps on almost all the popular desktop and mobile OSes.  Honestly,
+it has everything you would expect for a personal note taking tool, probably
+even more. But there is only one thing missing, a markup language of your
+choice.</p>
+<p><a href="http://tiddlywiki.com">TiddlyWiki</a> is an interesting tool, that it's written
+completely in JavaScript and run in a client browser. I used to take notes
+with TiddlyWiki in firefox with a plugin to save to local file, and put that
+file in my GoogleDrive sync folder.  I was almost satisfied except for once
+that I forgot to click the save button and a full day work was gone. I mean,
+come on, it's 2014, and we don't really need a save button like 20 years ago
+right?</p>
+<p><img alt="TiddlyWiki5 Getting Started page" src="/images/tiddlywiki5.png" /></p>
+<p>Fortunately, the latest <a href="https://github.com/Jermolene/TiddlyWiki5">TiddlyWiki5</a>
+seems to have all these fixed, and it didn't take me very long to have a
+perfect setup on <a href="http://openshift.com">OpenShift</a>.
+<!-- PELICAN_END_SUMMARY --></p>
+<h3>Cloud App Hosting</h3>
+<p>The latest <a href="https://github.com/Jermolene/TiddlyWiki5">TiddlyWiki5</a> can be
+hosted on a server with <a href="http://nodejs.org">nodejs</a>.  There are many free
+App hosting sites like <a href="http://nodejitsu.com">nodejitsu</a> and
+<a href="http://heroku.com">heroku</a>, of which I like <a href="http://openshift.com">OpenShift</a>
+the most.  The bias is not because OpenShift is backed by the famous open
+source company RedHat, but that I have to agree they do have a good
+understanding of what a developer with Unix background really needs,
+paticularly the SSH connection that I can manage the app, storage,
+and check what's going in a familiar way.</p>
+<p>The <a href="https://www.openshift.com/products/pricing">free plan</a> supports up to 3
+small gears, which is sufficient to get started.</p>
+<p><img alt="OpenShift Getting Started page" src="/images/openshift.png" /></p>
+<h3>Setting up TiddlyWiki5 on OpenShift</h3>
+<p>While OpenShift supports app management from web or IDE, a command line is
+still my best friend, and especially <a href="https://www.openshift.com/get-started#cli">rhc</a>
+is such an intuitive one.</p>
+<p>Installation is easy on Ubuntu once you get an account,</p>
+<div class="highlight"><pre><span class="err">$</span> <span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">rubygems</span>
+<span class="err">$</span> <span class="n">sudo</span> <span class="n">gem</span> <span class="n">install</span> <span class="n">rhc</span>
+<span class="err">$</span> <span class="n">sudo</span> <span class="n">gem</span> <span class="n">update</span> <span class="n">rhc</span>
+</pre></div>
+
+
+<p>Now use <code>rhc</code> to create an app with nodejs as backend,</p>
+<div class="highlight"><pre><span class="err">$</span> <span class="n">rhc</span> <span class="n">setup</span> <span class="err">#</span> <span class="n">login</span><span class="p">,</span> <span class="n">setup</span> <span class="n">SSH</span> <span class="n">keys</span> <span class="n">and</span> <span class="n">domain</span>
+<span class="err">$</span> <span class="n">rhc</span> <span class="n">app</span> <span class="n">create</span> <span class="n">tiddlywiki5</span> <span class="n">nodejs</span><span class="o">-</span><span class="mf">0.10</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">git</span>
+</pre></div>
+
+
+<p>You will need to pick up your domain, so your app can be accessed from</p>
+<p><code>&lt;appname&gt;-&lt;domain&gt;.rhcloud.com</code></p>
+<p><code>--no-git</code> tells <code>rhc</code> <em>not</em> to create a local git repo (however, an empty
+git repo on the server is still created), as we will use TiddlyWiki5 on
+github as the repo instead of starting from a new.</p>
+<p><code>rhc apps</code> will give an overview of the apps of your account, e.g.</p>
+<div class="highlight"><pre><span class="n">tiddlywiki5</span> <span class="err">@</span> <span class="n">http</span><span class="o">:</span><span class="c1">//tiddlywiki5-domain.rhcloud.com/ (uuid: 123456789abcdef012345678)</span>
+<span class="o">--------------------------------------------------------------------</span>
+  <span class="nl">Domain:</span>     <span class="n">domain</span>
+  <span class="nl">Created:</span>    <span class="n">Mar</span> <span class="mi">27</span>  <span class="mi">9</span><span class="o">:</span><span class="mi">52</span> <span class="n">PM</span>
+  <span class="nl">Gears:</span>      <span class="mi">1</span> <span class="p">(</span><span class="n">defaults</span> <span class="n">to</span> <span class="n">small</span><span class="p">)</span>
+  <span class="n">Git</span> <span class="n">URL</span><span class="o">:</span>    <span class="n">ssh</span><span class="o">:</span><span class="c1">//123456789abcdef012345678@tiddlywiki5-domain.rhcloud.com/~/git/tiddlywiki5.git/</span>
+  <span class="nl">SSH:</span>        <span class="mi">123456789</span><span class="n">abcdef012345678</span><span class="err">@</span><span class="n">tiddlywiki5</span><span class="o">-</span><span class="n">domain</span><span class="p">.</span><span class="n">rhcloud</span><span class="p">.</span><span class="n">com</span>
+  <span class="nl">Deployment:</span> <span class="k">auto</span> <span class="p">(</span><span class="n">on</span> <span class="n">git</span> <span class="n">push</span><span class="p">)</span>
+
+  <span class="n">nodejs</span><span class="o">-</span><span class="mf">0.10</span> <span class="p">(</span><span class="n">Node</span><span class="p">.</span><span class="n">js</span> <span class="mf">0.10</span><span class="p">)</span>
+  <span class="o">--------------------------</span>
+    <span class="nl">Gears:</span> <span class="mi">1</span> <span class="n">small</span>
+</pre></div>
+
+
+<p>Next, download TiddlyWiki5 from github and push to the remote git,</p>
+<div class="highlight"><pre><span class="err">$</span> <span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="o">:</span><span class="c1">//github.com/Jermolene/TiddlyWiki5</span>
+<span class="err">$</span> <span class="n">cd</span> <span class="n">TiddlyWiki5</span>
+<span class="err">$</span> <span class="n">git</span> <span class="n">remote</span> <span class="n">add</span> <span class="n">rhc</span> <span class="o">&lt;</span><span class="n">git</span><span class="o">-</span><span class="n">url</span><span class="o">&gt;</span>
+<span class="err">$</span> <span class="n">git</span> <span class="n">push</span> <span class="o">-</span><span class="n">f</span> <span class="n">rhc</span>
+</pre></div>
+
+
+<p><code>&lt;git-url&gt;</code> being the <code>Git URL:</code> displayed by <code>rhc apps</code>. OpenShift will
+try to automatically deploy the app just pushed.</p>
+<p>However, if you access http://tiddlywiki5-<yourdomain>.rhcloud.com, you
+will get a 404, page not found.  We need to tell OpenShift how to start
+the app with some change like below.</p>
+<div class="highlight"><pre><span class="gh">diff --git a/package.json b/package.json</span>
+<span class="gh">index c579df2..90a0ede 100644</span>
+<span class="gd">--- a/package.json</span>
+<span class="gi">+++ b/package.json</span>
+<span class="gu">@@ -13,7 +13,7 @@</span>
+   &quot;bin&quot;: {
+     &quot;tiddlywiki&quot;: &quot;./tiddlywiki.js&quot;
+   },
+<span class="gd">-  &quot;main&quot;: &quot;./boot/boot.js&quot;,</span>
+<span class="gi">+  &quot;main&quot; : &quot;./server.js&quot;,</span>
+   &quot;repository&quot;: {
+     &quot;type&quot;: &quot;git&quot;,
+     &quot;url&quot;: &quot;https://github.com/Jermolene/TiddlyWiki5.git&quot;
+</pre></div>
+
+
+<p>And create a server.js file to start the App:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">$tw</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;./boot/boot.js&quot;</span><span class="p">).</span><span class="nx">TiddlyWiki</span><span class="p">();</span>
+
+<span class="nx">$tw</span><span class="p">.</span><span class="nx">boot</span><span class="p">.</span><span class="nx">argv</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">OPENSHIFT_DATA_DIR</span><span class="p">,</span>
+  <span class="s2">&quot;--verbose&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;--server&quot;</span><span class="p">,</span>
+  <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">OPENSHIFT_NODEJS_PORT</span><span class="p">,</span>
+  <span class="s2">&quot;$:/core/save/all&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;text/plain&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;text/html&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;&lt;username&gt;&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;&lt;password&gt;&quot;</span><span class="p">,</span>
+  <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">OPENSHIFT_NODEJS_IP</span><span class="p">,</span>
+<span class="p">];</span>
+<span class="o">+</span><span class="nx">$tw</span><span class="p">.</span><span class="nx">boot</span><span class="p">.</span><span class="nx">boot</span><span class="p">();</span>
+</pre></div>
+
+
+<p>OpenShift will try to execute server.js for a nodejs app. Note the
+ip address and port will have to be aligned with OpenShift, so the
+requests can be redirected to your app. OpenShift provides two
+environment variables <code>OPENSHIFT_NODEJS_IP</code> and <code>OPENSHIFT_NODEJS_PORT</code>
+for this purpose.</p>
+<p>And for file-system based storage, OpenShift offers a directory for
+use in variable <code>OPENSHIFT_DATA_DIR</code>.</p>
+<p>With the change, you have to commit and push to re-deploy.</p>
+<div class="highlight"><pre><span class="err">$</span> <span class="n">git</span> <span class="n">commit</span> <span class="o">-</span><span class="n">a</span> <span class="o">-</span><span class="n">m</span> <span class="s">&quot;Update for deployment on OpenShift&quot;</span>
+<span class="err">$</span> <span class="n">git</span> <span class="n">push</span> <span class="o">-</span><span class="n">f</span> <span class="n">rhc</span>
+</pre></div>
+
+
+<p>Now you should be able see TiddlyWiki5 show up. If not, you can
+ssh to the server and check what's going wrong. The logs will be
+in nodejs/logs/node.log.</p>
+<h3>Escape of character "/"</h3>
+<p>There is still one more issue, when you create a new tiddler, you
+will normally get a sync error.  This seems to be an issue with
+OpenShift, as long as your URL request contains character <code>/</code>, even
+if it is escaped as <code>%2F</code>, it will still be recognized and filtered.</p>
+<p>To workaround this issue, we would have to escape the <code>/</code> character
+in a tiddler title to be something else. Currently I am using a naive
+change like below.</p>
+<p>When a url is generated for a tiddler to be uploaded to the server,
+we escape it to something else in <code>plugins/tiddlywiki/tiddlyweb/tiddlywebadaptor.js</code>:</p>
+<div class="highlight"><pre><span class="kd">function</span> <span class="nx">encodeTiddlerTitle</span><span class="p">(</span><span class="nx">title</span><span class="p">)</span> <span class="p">{</span>
+       <span class="k">return</span> <span class="nb">encodeURIComponent</span><span class="p">(</span><span class="nx">title</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/\//g</span><span class="p">,</span> <span class="s2">&quot;%SLASH%&quot;</span><span class="p">));</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>And when the node.js server receives the request, it has to restore
+the escaped sequence back to the original character in
+<code>core/modules/commands/server.js</code>:</p>
+<div class="highlight"><pre><span class="kd">function</span> <span class="nx">decodeTiddlerTitle</span><span class="p">(</span><span class="nx">title</span><span class="p">)</span> <span class="p">{</span>
+       <span class="k">return</span> <span class="nb">decodeURIComponent</span><span class="p">(</span><span class="nx">title</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/%SLASH%/g</span><span class="p">,</span> <span class="s2">&quot;/&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>The full diff can be found <a href="https://github.com/ericmiao/TiddlyWiki5/commit/4e91836909561fbcf0a7d8e715b3599bc6dcdd4d">here</a>.</p></div>
+    <footer>
+<p class="meta">
+  <span class="byline author vcard">
+    Posted by <span class="fn">Eric Miao</span>
+  </span>
+<time datetime="2014-04-05T00:00:00" pubdate>Sat 05 April 2014</time></p><div class="sharing">
+</div>    </footer>
+  </article>
+
+</div>
+<aside class="sidebar">
+  <section>
+    <h1>Recent Posts</h1>
+    <ul id="recent_posts">
+      <li class="post">
+          <a href="/blog/2014/04/05/setup-personal-tiddlywiki-on-openshift/">Setup a personal TiddlyWiki on OpenShift</a>
+      </li>
+      <li class="post">
+          <a href="/blog/2014/04/03/my-first-post-with-pelican-octopress-theme/">My first post with pelican octopress theme</a>
+      </li>
+    </ul>
+  </section>
+  <section>
+      
+    <h1>Categories</h1>
+    <ul id="recent_posts">
+        <li><a href="/category/misc.html">misc</a></li>
+    </ul>
+  </section>
+ 
+
+  <section>
+  <h1>Tags</h1>
+  </section>
+
+
+    <section>
+        <h1>Social</h1>
+        <ul>
+            <li><a href="#" target="_blank">You can add links in your config file</a></li>
+            <li><a href="#" target="_blank">Another social link</a></li>
+        </ul>
+    </section>
+    <section>
+        <h1>Blogroll</h1>
+        <ul>
+            <li><a href="http://getpelican.com/" target="_blank">Pelican</a></li>
+            <li><a href="http://python.org/" target="_blank">Python.org</a></li>
+            <li><a href="http://jinja.pocoo.org/" target="_blank">Jinja2</a></li>
+            <li><a href="#" target="_blank">You can modify those links in your config file</a></li>
+        </ul>
+    </section>
+
+</aside>    </div>
+  </div>
+  <footer role="contentinfo"><p>
+      Copyright &copy; 2014 - Eric Miao -
+  <span class="credit">Powered by <a href="http://getpelican.com">Pelican</a></span>
+</p></footer>
+</body>
+</html>
