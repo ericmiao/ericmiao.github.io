@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Another Code Farmer's Backyard</title><link>http://ericmiao.github.io/</link><description></description><atom:link href="http://ericmiao.github.io/feeds/eric-miao.rss.xml" rel="self"></atom:link><lastBuildDate>Sat, 05 Apr 2014 00:00:00 -0700</lastBuildDate><item><title>Setup a personal TiddlyWiki on OpenShift</title><link>http://ericmiao.github.io/blog/2014/04/05/setup-personal-tiddlywiki-on-openshift/</link><description>&lt;!-- PELICAN_BEGIN_SUMMARY --&gt;
+
+&lt;p&gt;I have always been looking for a perfect personal note taking tool, and tried
+many different things, yet I'm satisified with none of them.
+&lt;a href="http://evernote.com"&gt;Evernote&lt;/a&gt; is neat and clean, has great support for rich
+text format, as well as pictures, audio and video. It's also web based, and
+has nice apps on almost all the popular desktop and mobile OSes.  Honestly,
+it has everything you would expect for a personal note taking tool, probably
+even more. But there is only one thing missing, a markup language of your
+choice.&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://tiddlywiki.com"&gt;TiddlyWiki&lt;/a&gt; is an interesting tool, that it's written
+completely in JavaScript and run in a client browser. I used to take notes
+with TiddlyWiki in firefox with a plugin to save to local file, and put that
+file in my GoogleDrive sync folder.  I was almost satisfied except for once
+that I forgot to click the save button and a full day work was gone. I mean,
+come on, it's 2014, and we don't really need a save button like 20 years ago
+right?&lt;/p&gt;
+&lt;p&gt;&lt;img alt="TiddlyWiki5 Getting Started page" src="http://ericmiao.github.io/images/tiddlywiki5.png" /&gt;&lt;/p&gt;
+&lt;p&gt;Fortunately, the latest &lt;a href="https://github.com/Jermolene/TiddlyWiki5"&gt;TiddlyWiki5&lt;/a&gt;
+seems to have all these fixed, and it didn't take me very long to have a
+perfect setup on &lt;a href="http://openshift.com"&gt;OpenShift&lt;/a&gt;.
+&lt;!-- PELICAN_END_SUMMARY --&gt;&lt;/p&gt;
+&lt;h3&gt;Cloud App Hosting&lt;/h3&gt;
+&lt;p&gt;The latest &lt;a href="https://github.com/Jermolene/TiddlyWiki5"&gt;TiddlyWiki5&lt;/a&gt; can be
+hosted on a server with &lt;a href="http://nodejs.org"&gt;nodejs&lt;/a&gt;.  There are many free
+App hosting sites like &lt;a href="http://nodejitsu.com"&gt;nodejitsu&lt;/a&gt; and
+&lt;a href="http://heroku.com"&gt;heroku&lt;/a&gt;, of which I like &lt;a href="http://openshift.com"&gt;OpenShift&lt;/a&gt;
+the most.  The bias is not because OpenShift is backed by the famous open
+source company RedHat, but that I have to agree they do have a good
+understanding of what a developer with Unix background really needs,
+paticularly the SSH connection that I can manage the app, storage,
+and check what's going in a familiar way.&lt;/p&gt;
+&lt;p&gt;The &lt;a href="https://www.openshift.com/products/pricing"&gt;free plan&lt;/a&gt; supports up to 3
+small gears, which is sufficient to get started.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="OpenShift Getting Started page" src="http://ericmiao.github.io/images/openshift.png" /&gt;&lt;/p&gt;
+&lt;h3&gt;Setting up TiddlyWiki5 on OpenShift&lt;/h3&gt;
+&lt;p&gt;While OpenShift supports app management from web or IDE, a command line is
+still my best friend, and especially &lt;a href="https://www.openshift.com/get-started#cli"&gt;rhc&lt;/a&gt;
+is such an intuitive one.&lt;/p&gt;
+&lt;p&gt;Installation is easy on Ubuntu once you get an account,&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;sudo apt-get install rubygems
+&lt;span class="nv"&gt;$ &lt;/span&gt;sudo gem install rhc
+&lt;span class="nv"&gt;$ &lt;/span&gt;sudo gem update rhc
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Now use &lt;code&gt;rhc&lt;/code&gt; to create an app with nodejs as backend,&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;rhc setup &lt;span class="c"&gt;# login, setup SSH keys and domain&lt;/span&gt;
+&lt;span class="nv"&gt;$ &lt;/span&gt;rhc app create tiddlywiki5 nodejs-0.10 --no-git
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;You will need to pick up your domain, so your app can be accessed from&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;&amp;lt;appname&amp;gt;-&amp;lt;domain&amp;gt;.rhcloud.com&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;--no-git&lt;/code&gt; tells &lt;code&gt;rhc&lt;/code&gt; &lt;em&gt;not&lt;/em&gt; to create a local git repo (however, an empty
+git repo on the server is still created), as we will use TiddlyWiki5 on
+github as the repo instead of starting from a new.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;rhc apps&lt;/code&gt; will give an overview of the apps of your account, e.g.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;tiddlywiki5 @ http://tiddlywiki5-domain.rhcloud.com/ &lt;span class="o"&gt;(&lt;/span&gt;uuid: 123456789abcdef012345678&lt;span class="o"&gt;)&lt;/span&gt;
+--------------------------------------------------------------------
+  Domain:     domain
+  Created:    Mar &lt;span class="m"&gt;27&lt;/span&gt;  9:52 PM
+  Gears:      &lt;span class="m"&gt;1&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;defaults to small&lt;span class="o"&gt;)&lt;/span&gt;
+  Git URL:    ssh://123456789abcdef012345678@tiddlywiki5-domain.rhcloud.com/~/git/tiddlywiki5.git/
+  SSH:        123456789abcdef012345678@tiddlywiki5-domain.rhcloud.com
+  Deployment: auto &lt;span class="o"&gt;(&lt;/span&gt;on git push&lt;span class="o"&gt;)&lt;/span&gt;
+
+  nodejs-0.10 &lt;span class="o"&gt;(&lt;/span&gt;Node.js 0.10&lt;span class="o"&gt;)&lt;/span&gt;
+  --------------------------
+    Gears: &lt;span class="m"&gt;1&lt;/span&gt; small
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Next, download TiddlyWiki5 from github and push to the remote git,&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;git clone https://github.com/Jermolene/TiddlyWiki5
+&lt;span class="nv"&gt;$ &lt;/span&gt;&lt;span class="nb"&gt;cd &lt;/span&gt;TiddlyWiki5
+&lt;span class="nv"&gt;$ &lt;/span&gt;git remote add rhc &amp;lt;git-url&amp;gt;
+&lt;span class="nv"&gt;$ &lt;/span&gt;git push -f rhc
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;code&gt;&amp;lt;git-url&amp;gt;&lt;/code&gt; being the &lt;code&gt;Git URL:&lt;/code&gt; displayed by &lt;code&gt;rhc apps&lt;/code&gt;. OpenShift will
+try to automatically deploy the app just pushed.&lt;/p&gt;
+&lt;p&gt;However, if you access http://tiddlywiki5-&lt;yourdomain&gt;.rhcloud.com, you
+will get a 404, page not found.  We need to tell OpenShift how to start
+the app with some change like below.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="gh"&gt;diff --git a/package.json b/package.json&lt;/span&gt;
+&lt;span class="gh"&gt;index c579df2..90a0ede 100644&lt;/span&gt;
+&lt;span class="gd"&gt;--- a/package.json&lt;/span&gt;
+&lt;span class="gi"&gt;+++ b/package.json&lt;/span&gt;
+&lt;span class="gu"&gt;@@ -13,7 +13,7 @@&lt;/span&gt;
+   &amp;quot;bin&amp;quot;: {
+     &amp;quot;tiddlywiki&amp;quot;: &amp;quot;./tiddlywiki.js&amp;quot;
+   },
+&lt;span class="gd"&gt;-  &amp;quot;main&amp;quot;: &amp;quot;./boot/boot.js&amp;quot;,&lt;/span&gt;
+&lt;span class="gi"&gt;+  &amp;quot;main&amp;quot; : &amp;quot;./server.js&amp;quot;,&lt;/span&gt;
+   &amp;quot;repository&amp;quot;: {
+     &amp;quot;type&amp;quot;: &amp;quot;git&amp;quot;,
+     &amp;quot;url&amp;quot;: &amp;quot;https://github.com/Jermolene/TiddlyWiki5.git&amp;quot;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;And create a server.js file to start the App:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;$tw&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;require&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;./boot/boot.js&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="nx"&gt;TiddlyWiki&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+
+&lt;span class="nx"&gt;$tw&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;boot&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;argv&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+  &lt;span class="nx"&gt;process&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;env&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;OPENSHIFT_DATA_DIR&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+  &lt;span class="s2"&gt;&amp;quot;--verbose&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+  &lt;span class="s2"&gt;&amp;quot;--server&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+  &lt;span class="nx"&gt;process&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;env&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;OPENSHIFT_NODEJS_PORT&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+  &lt;span class="s2"&gt;&amp;quot;$:/core/save/all&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+  &lt;span class="s2"&gt;&amp;quot;text/plain&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+  &lt;span class="s2"&gt;&amp;quot;text/html&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+  &lt;span class="s2"&gt;&amp;quot;&amp;lt;username&amp;gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+  &lt;span class="s2"&gt;&amp;quot;&amp;lt;password&amp;gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+  &lt;span class="nx"&gt;process&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;env&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;OPENSHIFT_NODEJS_IP&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="nx"&gt;$tw&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;boot&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;boot&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;OpenShift will try to execute server.js for a nodejs app. Note the
+ip address and port will have to be aligned with OpenShift, so the
+requests can be redirected to your app. OpenShift provides two
+environment variables &lt;code&gt;OPENSHIFT_NODEJS_IP&lt;/code&gt; and &lt;code&gt;OPENSHIFT_NODEJS_PORT&lt;/code&gt;
+for this purpose.&lt;/p&gt;
+&lt;p&gt;And for file-system based storage, OpenShift offers a directory for
+use in variable &lt;code&gt;OPENSHIFT_DATA_DIR&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;With the change, you have to commit and push to re-deploy.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;git commit -a -m &lt;span class="s2"&gt;&amp;quot;Update for deployment on OpenShift&amp;quot;&lt;/span&gt;
+&lt;span class="nv"&gt;$ &lt;/span&gt;git push -f rhc
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Now you should be able see TiddlyWiki5 show up. If not, you can
+ssh to the server and check what's going wrong. The logs will be
+in nodejs/logs/node.log.&lt;/p&gt;
+&lt;h3&gt;Escape of character "/"&lt;/h3&gt;
+&lt;p&gt;There is still one more issue, when you create a new tiddler, you
+will normally get a sync error.  This seems to be an issue with
+OpenShift, as long as your URL request contains character &lt;code&gt;/&lt;/code&gt;, even
+if it is escaped as &lt;code&gt;%2F&lt;/code&gt;, it will still be recognized and filtered.&lt;/p&gt;
+&lt;p&gt;To workaround this issue, we would have to escape the &lt;code&gt;/&lt;/code&gt; character
+in a tiddler title to be something else. Currently I am using a naive
+change like below.&lt;/p&gt;
+&lt;p&gt;When a url is generated for a tiddler to be uploaded to the server,
+we escape it to something else in &lt;code&gt;plugins/tiddlywiki/tiddlyweb/tiddlywebadaptor.js&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nx"&gt;encodeTiddlerTitle&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;title&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+       &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nb"&gt;encodeURIComponent&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;title&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;replace&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sr"&gt;/\//g&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;%SLASH%&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;));&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;And when the node.js server receives the request, it has to restore
+the escaped sequence back to the original character in
+&lt;code&gt;core/modules/commands/server.js&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="kd"&gt;function&lt;/span&gt; &lt;span class="nx"&gt;decodeTiddlerTitle&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;title&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+       &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nb"&gt;decodeURIComponent&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;title&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="nx"&gt;replace&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sr"&gt;/%SLASH%/g&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;/&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The full diff can be found &lt;a href="https://github.com/ericmiao/TiddlyWiki5/commit/4e91836909561fbcf0a7d8e715b3599bc6dcdd4d"&gt;here&lt;/a&gt;.&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Eric Miao</dc:creator><pubDate>Sat, 05 Apr 2014 00:00:00 -0700</pubDate><guid>tag:ericmiao.github.io,2014-04-05:blog/2014/04/05/setup-personal-tiddlywiki-on-openshift/</guid></item><item><title>My first post with pelican octopress theme</title><link>http://ericmiao.github.io/blog/2014/04/03/my-first-post-with-pelican-octopress-theme/</link><description>&lt;!-- PELICAN_BEGIN_SUMMARY --&gt;
+
+&lt;p&gt;Not a big fan of blog, but I was really fascinated by this idea of having a
+static microblog site which is:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;written in plain text with your preferred markup language&lt;/li&gt;
+&lt;li&gt;generated and themed on-the-fly&lt;/li&gt;
+&lt;li&gt;version controlled by git&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;While &lt;a href="http://jekyllrb.com"&gt;Jekyll&lt;/a&gt; and &lt;a href="http://octopress.org"&gt;Octopress&lt;/a&gt; are
+two such excellent tools, they are all written in Ruby, which I'm not quite
+familiar with.  I was not able to find a Python equivalent tool until not very
+long ago I found &lt;a href="http://jakevdp.github.io"&gt;Jake's blog&lt;/a&gt;.  It was well themed
+and all the articles are great to read.  I can't refrain the idea of having
+a similar blog site of my own.  It turned out to be not very complicated, I
+am using Ubuntu and followed the steps below.&lt;/p&gt;
+&lt;!-- PELICAN_END_SUMMARY --&gt;
+
+&lt;h3&gt;Install prerequisites:&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://getpelican.com"&gt;pelican&lt;/a&gt; - a python based static site generator&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://https://help.github.com/articles/markdown-basics"&gt;markdown&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;sudo apt-get install pip
+&lt;span class="nv"&gt;$ &lt;/span&gt;sudo pip install pelican
+&lt;span class="nv"&gt;$ &lt;/span&gt;sudo pip install markdown
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Install octopress theme for pelican&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;git clone https://github.com/duilio/pelican-octopress-theme
+&lt;span class="nv"&gt;$ &lt;/span&gt;sudo pelican-themes -i pelican-octopress-theme pelican-octopress-theme/
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;&lt;a href="http://docs.getpelican.com/en/3.3.0/getting_started.html"&gt;Kickstart&lt;/a&gt; the site with pelican&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;pelican-quickstart 
+Welcome to pelican-quickstart v3.3.0.
+
+This script will &lt;span class="nb"&gt;help &lt;/span&gt;you create a new Pelican-based website.
+
+Please answer the following questions so this script can generate the files
+needed by Pelican.
+
+
+&amp;gt; Where &lt;span class="k"&gt;do&lt;/span&gt; you want to create your new web site? &lt;span class="o"&gt;[&lt;/span&gt;.&lt;span class="o"&gt;]&lt;/span&gt; 
+&amp;gt; What will be the title of this web site? Another Code Farmer&lt;span class="err"&gt;&amp;#39;&lt;/span&gt;s Backyard
+&amp;gt; Who will be the author of this web site? Eric Miao
+&amp;gt; What will be the default language of this web site? &lt;span class="o"&gt;[&lt;/span&gt;en&lt;span class="o"&gt;]&lt;/span&gt; 
+&amp;gt; Do you want to specify a URL prefix? e.g., http://example.com   &lt;span class="o"&gt;(&lt;/span&gt;Y/n&lt;span class="o"&gt;)&lt;/span&gt; n
+&amp;gt; Do you want to &lt;span class="nb"&gt;enable &lt;/span&gt;article pagination? &lt;span class="o"&gt;(&lt;/span&gt;Y/n&lt;span class="o"&gt;)&lt;/span&gt; n
+&amp;gt; Do you want to generate a Fabfile/Makefile to automate generation and publishing? &lt;span class="o"&gt;(&lt;/span&gt;Y/n&lt;span class="o"&gt;)&lt;/span&gt; 
+&amp;gt; Do you want an auto-reload &lt;span class="p"&gt;&amp;amp;&lt;/span&gt; simpleHTTP script to assist with theme and site development? &lt;span class="o"&gt;(&lt;/span&gt;Y/n&lt;span class="o"&gt;)&lt;/span&gt; 
+&amp;gt; Do you want to upload your website using FTP? &lt;span class="o"&gt;(&lt;/span&gt;y/N&lt;span class="o"&gt;)&lt;/span&gt; 
+&amp;gt; Do you want to upload your website using SSH? &lt;span class="o"&gt;(&lt;/span&gt;y/N&lt;span class="o"&gt;)&lt;/span&gt; 
+&amp;gt; Do you want to upload your website using Dropbox? &lt;span class="o"&gt;(&lt;/span&gt;y/N&lt;span class="o"&gt;)&lt;/span&gt; 
+&amp;gt; Do you want to upload your website using S3? &lt;span class="o"&gt;(&lt;/span&gt;y/N&lt;span class="o"&gt;)&lt;/span&gt; 
+&amp;gt; Do you want to upload your website using Rackspace Cloud Files? &lt;span class="o"&gt;(&lt;/span&gt;y/N&lt;span class="o"&gt;)&lt;/span&gt; 
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Voila! Create your first article&lt;/h3&gt;
+&lt;p&gt;Creating a plain text file in the folder of &lt;code&gt;content&lt;/code&gt;, name the file in format
+&lt;code&gt;yyyy-mm-dd-&amp;lt;post-topic&amp;gt;.md&lt;/code&gt;.  For &lt;a href="http://docs.getpelican.com/en/3.3.0/getting_started.html#writing-content-using-pelican"&gt;example&lt;/a&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;Title&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;My&lt;/span&gt; &lt;span class="kd"&gt;super&lt;/span&gt; &lt;span class="n"&gt;title&lt;/span&gt;
+&lt;span class="n"&gt;Date&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;2010&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;12&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;03&lt;/span&gt; &lt;span class="mi"&gt;10&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;20&lt;/span&gt;
+&lt;span class="n"&gt;Category&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Python&lt;/span&gt;
+&lt;span class="n"&gt;Tags&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;pelican&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;publishing&lt;/span&gt;
+&lt;span class="n"&gt;Slug&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;my&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="kd"&gt;super&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;post&lt;/span&gt;
+&lt;span class="n"&gt;Author&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Alexis&lt;/span&gt; &lt;span class="n"&gt;Metaireau&lt;/span&gt;
+&lt;span class="n"&gt;Summary&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Short&lt;/span&gt; &lt;span class="n"&gt;version&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;index&lt;/span&gt; &lt;span class="n"&gt;and&lt;/span&gt; &lt;span class="n"&gt;feeds&lt;/span&gt;
+
+&lt;span class="n"&gt;This&lt;/span&gt; &lt;span class="k"&gt;is&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;content&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt; &lt;span class="n"&gt;my&lt;/span&gt; &lt;span class="kd"&gt;super&lt;/span&gt; &lt;span class="n"&gt;blog&lt;/span&gt; &lt;span class="n"&gt;post&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Change pelicanconf.py to use octopress theme:&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="gh"&gt;diff --git a/pelicanconf.py b/pelicanconf.py&lt;/span&gt;
+&lt;span class="gh"&gt;index 590c26d..c6b05d1 100644&lt;/span&gt;
+&lt;span class="gd"&gt;--- a/pelicanconf.py&lt;/span&gt;
+&lt;span class="gi"&gt;+++ b/pelicanconf.py&lt;/span&gt;
+&lt;span class="gu"&gt;@@ -29,3 +29,5 @@ DEFAULT_PAGINATION = False&lt;/span&gt;
+
+ # Uncomment following line if you want document-relative URLs when developing
+ #RELATIVE_URLS = True
+&lt;span class="gi"&gt;+&lt;/span&gt;
+&lt;span class="gi"&gt;+THEME = &amp;#39;pelican-octopress-theme&amp;#39;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Generate and check the site:&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;$ &lt;/span&gt;make html
+&lt;span class="nv"&gt;$ &lt;/span&gt;&lt;span class="nb"&gt;cd &lt;/span&gt;output &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; python -m SimpleHTTPServer
+Serving HTTP on 0.0.0.0 port &lt;span class="m"&gt;8000&lt;/span&gt; ...
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Deploy when satisfied&lt;/h3&gt;
+&lt;p&gt;For example, &lt;a href="http://pages.github.com/"&gt;github pages&lt;/a&gt; is a good choice.&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Eric Miao</dc:creator><pubDate>Thu, 03 Apr 2014 00:00:00 -0700</pubDate><guid>tag:ericmiao.github.io,2014-04-03:blog/2014/04/03/my-first-post-with-pelican-octopress-theme/</guid></item></channel></rss>

@@ -14,12 +14,12 @@
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link href="/favicon.png" rel="icon">
-  <link href="/theme/css/main.css" media="screen, projection"
+  <link href="http://ericmiao.github.io/favicon.png" rel="icon">
+  <link href="http://ericmiao.github.io/theme/css/main.css" media="screen, projection"
         rel="stylesheet" type="text/css">
-  <script src="/theme/js/modernizr-2.0.js"></script>
-  <script src="/theme/js/ender.js"></script>
-  <script src="/theme/js/octopress.js" type="text/javascript"></script>
+  <script src="http://ericmiao.github.io/theme/js/modernizr-2.0.js"></script>
+  <script src="http://ericmiao.github.io/theme/js/ender.js"></script>
+  <script src="http://ericmiao.github.io/theme/js/octopress.js" type="text/javascript"></script>
 
   <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic"
         rel="stylesheet" type="text/css">
@@ -29,7 +29,7 @@
 
 <body>
   <header role="banner"><hgroup>
-  <h1><a href="/">Another Code Farmer's Backyard</a></h1>
+  <h1><a href="http://ericmiao.github.io/">Another Code Farmer's Backyard</a></h1>
 </hgroup></header>
   <nav role="navigation"><ul class="subscription" data-subscription="rss">
 </ul>
@@ -40,7 +40,7 @@
     <li><a href="/archives.html">Archives</a></li>
     <li><a href="http://ericmiao.github.io/">Home Page</a></li>
     <li class="active">
-    <a href="/category/misc.html">Misc</a>
+    <a href="http://ericmiao.github.io/category/misc.html">Misc</a>
     </li>
 </ul></nav>
   <div id="main">
@@ -49,11 +49,10 @@
   <article class="hentry" role="article">
 <header>
       <h1 class="entry-title">My first post with pelican octopress theme</h1>
-      <p class="meta"><time datetime="2014-04-03T00:00:00" pubdate>Thu 03 April 2014</time></p>
+      <p class="meta"><time datetime="2014-04-03T00:00:00-07:00" pubdate>Thu 03 April 2014</time></p>
 </header>
 
-  <div class="entry-content"><hr />
-<!-- PELICAN_BEGIN_SUMMARY -->
+  <div class="entry-content"><!-- PELICAN_BEGIN_SUMMARY -->
 
 <p>Not a big fan of blog, but I was really fascinated by this idea of having a
 static microblog site which is:</p>
@@ -76,41 +75,41 @@ am using Ubuntu and followed the steps below.</p>
 <li><a href="http://getpelican.com">pelican</a> - a python based static site generator</li>
 <li><a href="http://https://help.github.com/articles/markdown-basics">markdown</a></li>
 </ul>
-<div class="highlight"><pre><span class="err">$</span> <span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">pip</span>
-<span class="err">$</span> <span class="n">sudo</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">pelican</span>
-<span class="err">$</span> <span class="n">sudo</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">markdown</span>
+<div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install pip
+<span class="nv">$ </span>sudo pip install pelican
+<span class="nv">$ </span>sudo pip install markdown
 </pre></div>
 
 
 <h3>Install octopress theme for pelican</h3>
-<div class="highlight"><pre><span class="err">$</span> <span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="o">:</span><span class="c1">//github.com/duilio/pelican-octopress-theme</span>
-<span class="err">$</span> <span class="n">sudo</span> <span class="n">pelican</span><span class="o">-</span><span class="n">themes</span> <span class="o">-</span><span class="n">i</span> <span class="n">pelican</span><span class="o">-</span><span class="n">octopress</span><span class="o">-</span><span class="n">theme</span> <span class="n">pelican</span><span class="o">-</span><span class="n">octopress</span><span class="o">-</span><span class="n">theme</span><span class="o">/</span>
+<div class="highlight"><pre><span class="nv">$ </span>git clone https://github.com/duilio/pelican-octopress-theme
+<span class="nv">$ </span>sudo pelican-themes -i pelican-octopress-theme pelican-octopress-theme/
 </pre></div>
 
 
 <h3><a href="http://docs.getpelican.com/en/3.3.0/getting_started.html">Kickstart</a> the site with pelican</h3>
-<div class="highlight"><pre><span class="err">$</span> <span class="n">pelican</span><span class="o">-</span><span class="n">quickstart</span> 
-<span class="n">Welcome</span> <span class="n">to</span> <span class="n">pelican</span><span class="o">-</span><span class="n">quickstart</span> <span class="n">v3</span><span class="mf">.3.0</span><span class="p">.</span>
+<div class="highlight"><pre><span class="nv">$ </span>pelican-quickstart 
+Welcome to pelican-quickstart v3.3.0.
 
-<span class="n">This</span> <span class="n">script</span> <span class="n">will</span> <span class="n">help</span> <span class="n">you</span> <span class="n">create</span> <span class="n">a</span> <span class="n">new</span> <span class="n">Pelican</span><span class="o">-</span><span class="n">based</span> <span class="n">website</span><span class="p">.</span>
+This script will <span class="nb">help </span>you create a new Pelican-based website.
 
-<span class="n">Please</span> <span class="n">answer</span> <span class="n">the</span> <span class="n">following</span> <span class="n">questions</span> <span class="n">so</span> <span class="n">this</span> <span class="n">script</span> <span class="n">can</span> <span class="n">generate</span> <span class="n">the</span> <span class="n">files</span>
-<span class="n">needed</span> <span class="n">by</span> <span class="n">Pelican</span><span class="p">.</span>
+Please answer the following questions so this script can generate the files
+needed by Pelican.
 
 
-<span class="o">&gt;</span> <span class="n">Where</span> <span class="k">do</span> <span class="n">you</span> <span class="n">want</span> <span class="n">to</span> <span class="n">create</span> <span class="n">your</span> <span class="n">new</span> <span class="n">web</span> <span class="n">site</span><span class="o">?</span> <span class="p">[.]</span> 
-<span class="o">&gt;</span> <span class="n">What</span> <span class="n">will</span> <span class="n">be</span> <span class="n">the</span> <span class="n">title</span> <span class="n">of</span> <span class="n">this</span> <span class="n">web</span> <span class="n">site</span><span class="o">?</span> <span class="n">Another</span> <span class="n">Code</span> <span class="n">Farmer</span><span class="err">&#39;</span><span class="n">s</span> <span class="n">Backyard</span>
-<span class="o">&gt;</span> <span class="n">Who</span> <span class="n">will</span> <span class="n">be</span> <span class="n">the</span> <span class="n">author</span> <span class="n">of</span> <span class="n">this</span> <span class="n">web</span> <span class="n">site</span><span class="o">?</span> <span class="n">Eric</span> <span class="n">Miao</span>
-<span class="o">&gt;</span> <span class="n">What</span> <span class="n">will</span> <span class="n">be</span> <span class="n">the</span> <span class="k">default</span> <span class="n">language</span> <span class="n">of</span> <span class="n">this</span> <span class="n">web</span> <span class="n">site</span><span class="o">?</span> <span class="p">[</span><span class="n">en</span><span class="p">]</span> 
-<span class="o">&gt;</span> <span class="n">Do</span> <span class="n">you</span> <span class="n">want</span> <span class="n">to</span> <span class="n">specify</span> <span class="n">a</span> <span class="n">URL</span> <span class="n">prefix</span><span class="o">?</span> <span class="n">e</span><span class="p">.</span><span class="n">g</span><span class="p">.,</span> <span class="n">http</span><span class="o">:</span><span class="c1">//example.com   (Y/n) n</span>
-<span class="o">&gt;</span> <span class="n">Do</span> <span class="n">you</span> <span class="n">want</span> <span class="n">to</span> <span class="n">enable</span> <span class="n">article</span> <span class="n">pagination</span><span class="o">?</span> <span class="p">(</span><span class="n">Y</span><span class="o">/</span><span class="n">n</span><span class="p">)</span> <span class="n">n</span>
-<span class="o">&gt;</span> <span class="n">Do</span> <span class="n">you</span> <span class="n">want</span> <span class="n">to</span> <span class="n">generate</span> <span class="n">a</span> <span class="n">Fabfile</span><span class="o">/</span><span class="n">Makefile</span> <span class="n">to</span> <span class="n">automate</span> <span class="n">generation</span> <span class="n">and</span> <span class="n">publishing</span><span class="o">?</span> <span class="p">(</span><span class="n">Y</span><span class="o">/</span><span class="n">n</span><span class="p">)</span> 
-<span class="o">&gt;</span> <span class="n">Do</span> <span class="n">you</span> <span class="n">want</span> <span class="n">an</span> <span class="k">auto</span><span class="o">-</span><span class="n">reload</span> <span class="o">&amp;</span> <span class="n">simpleHTTP</span> <span class="n">script</span> <span class="n">to</span> <span class="n">assist</span> <span class="n">with</span> <span class="n">theme</span> <span class="n">and</span> <span class="n">site</span> <span class="n">development</span><span class="o">?</span> <span class="p">(</span><span class="n">Y</span><span class="o">/</span><span class="n">n</span><span class="p">)</span> 
-<span class="o">&gt;</span> <span class="n">Do</span> <span class="n">you</span> <span class="n">want</span> <span class="n">to</span> <span class="n">upload</span> <span class="n">your</span> <span class="n">website</span> <span class="n">using</span> <span class="n">FTP</span><span class="o">?</span> <span class="p">(</span><span class="n">y</span><span class="o">/</span><span class="n">N</span><span class="p">)</span> 
-<span class="o">&gt;</span> <span class="n">Do</span> <span class="n">you</span> <span class="n">want</span> <span class="n">to</span> <span class="n">upload</span> <span class="n">your</span> <span class="n">website</span> <span class="n">using</span> <span class="n">SSH</span><span class="o">?</span> <span class="p">(</span><span class="n">y</span><span class="o">/</span><span class="n">N</span><span class="p">)</span> 
-<span class="o">&gt;</span> <span class="n">Do</span> <span class="n">you</span> <span class="n">want</span> <span class="n">to</span> <span class="n">upload</span> <span class="n">your</span> <span class="n">website</span> <span class="n">using</span> <span class="n">Dropbox</span><span class="o">?</span> <span class="p">(</span><span class="n">y</span><span class="o">/</span><span class="n">N</span><span class="p">)</span> 
-<span class="o">&gt;</span> <span class="n">Do</span> <span class="n">you</span> <span class="n">want</span> <span class="n">to</span> <span class="n">upload</span> <span class="n">your</span> <span class="n">website</span> <span class="n">using</span> <span class="n">S3</span><span class="o">?</span> <span class="p">(</span><span class="n">y</span><span class="o">/</span><span class="n">N</span><span class="p">)</span> 
-<span class="o">&gt;</span> <span class="n">Do</span> <span class="n">you</span> <span class="n">want</span> <span class="n">to</span> <span class="n">upload</span> <span class="n">your</span> <span class="n">website</span> <span class="n">using</span> <span class="n">Rackspace</span> <span class="n">Cloud</span> <span class="n">Files</span><span class="o">?</span> <span class="p">(</span><span class="n">y</span><span class="o">/</span><span class="n">N</span><span class="p">)</span> 
+&gt; Where <span class="k">do</span> you want to create your new web site? <span class="o">[</span>.<span class="o">]</span> 
+&gt; What will be the title of this web site? Another Code Farmer<span class="err">&#39;</span>s Backyard
+&gt; Who will be the author of this web site? Eric Miao
+&gt; What will be the default language of this web site? <span class="o">[</span>en<span class="o">]</span> 
+&gt; Do you want to specify a URL prefix? e.g., http://example.com   <span class="o">(</span>Y/n<span class="o">)</span> n
+&gt; Do you want to <span class="nb">enable </span>article pagination? <span class="o">(</span>Y/n<span class="o">)</span> n
+&gt; Do you want to generate a Fabfile/Makefile to automate generation and publishing? <span class="o">(</span>Y/n<span class="o">)</span> 
+&gt; Do you want an auto-reload <span class="p">&amp;</span> simpleHTTP script to assist with theme and site development? <span class="o">(</span>Y/n<span class="o">)</span> 
+&gt; Do you want to upload your website using FTP? <span class="o">(</span>y/N<span class="o">)</span> 
+&gt; Do you want to upload your website using SSH? <span class="o">(</span>y/N<span class="o">)</span> 
+&gt; Do you want to upload your website using Dropbox? <span class="o">(</span>y/N<span class="o">)</span> 
+&gt; Do you want to upload your website using S3? <span class="o">(</span>y/N<span class="o">)</span> 
+&gt; Do you want to upload your website using Rackspace Cloud Files? <span class="o">(</span>y/N<span class="o">)</span> 
 </pre></div>
 
 
@@ -144,9 +143,9 @@ am using Ubuntu and followed the steps below.</p>
 
 
 <h3>Generate and check the site:</h3>
-<div class="highlight"><pre><span class="err">$</span> <span class="n">make</span> <span class="n">html</span>
-<span class="err">$</span> <span class="n">cd</span> <span class="n">output</span> <span class="o">&amp;&amp;</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">SimpleHTTPServer</span>
-<span class="n">Serving</span> <span class="n">HTTP</span> <span class="n">on</span> <span class="mf">0.0.0.0</span> <span class="n">port</span> <span class="mi">8000</span> <span class="p">...</span>
+<div class="highlight"><pre><span class="nv">$ </span>make html
+<span class="nv">$ </span><span class="nb">cd </span>output <span class="o">&amp;&amp;</span> python -m SimpleHTTPServer
+Serving HTTP on 0.0.0.0 port <span class="m">8000</span> ...
 </pre></div>
 
 
@@ -157,7 +156,7 @@ am using Ubuntu and followed the steps below.</p>
   <span class="byline author vcard">
     Posted by <span class="fn">Eric Miao</span>
   </span>
-<time datetime="2014-04-03T00:00:00" pubdate>Thu 03 April 2014</time></p><div class="sharing">
+<time datetime="2014-04-03T00:00:00-07:00" pubdate>Thu 03 April 2014</time></p><div class="sharing">
 </div>    </footer>
   </article>
 
@@ -167,10 +166,10 @@ am using Ubuntu and followed the steps below.</p>
     <h1>Recent Posts</h1>
     <ul id="recent_posts">
       <li class="post">
-          <a href="/blog/2014/04/05/setup-personal-tiddlywiki-on-openshift/">Setup a personal TiddlyWiki on OpenShift</a>
+          <a href="http://ericmiao.github.io/blog/2014/04/05/setup-personal-tiddlywiki-on-openshift/">Setup a personal TiddlyWiki on OpenShift</a>
       </li>
       <li class="post">
-          <a href="/blog/2014/04/03/my-first-post-with-pelican-octopress-theme/">My first post with pelican octopress theme</a>
+          <a href="http://ericmiao.github.io/blog/2014/04/03/my-first-post-with-pelican-octopress-theme/">My first post with pelican octopress theme</a>
       </li>
     </ul>
   </section>
@@ -178,7 +177,7 @@ am using Ubuntu and followed the steps below.</p>
       
     <h1>Categories</h1>
     <ul id="recent_posts">
-        <li><a href="/category/misc.html">misc</a></li>
+        <li><a href="http://ericmiao.github.io/category/misc.html">misc</a></li>
     </ul>
   </section>
  
