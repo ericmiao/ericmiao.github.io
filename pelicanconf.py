@@ -28,7 +28,7 @@ SOCIAL = (('You can add links in your config file', '#'),
 DEFAULT_PAGINATION = False
 
 # Uncomment following line if you want document-relative URLs when developing
-#RELATIVE_URLS = True
+RELATIVE_URLS = True
 
 THEME = 'pelican-octopress-theme'
 
@@ -37,3 +37,5 @@ ARTICLE_SAVE_AS = 'blog/{date:%Y}/{date:%m}/{date:%d}/{slug}/index.html'
 
 MENUITEMS = [('Archives', '/archives.html'),
              ('Home Page', 'http://ericmiao.github.io/')]
+
+STATIC_PATHS = [ 'images', 'css', 'js' ]
